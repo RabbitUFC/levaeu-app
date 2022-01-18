@@ -73,7 +73,7 @@ ThemeData theme(context) {
         ))
       )
     ),
-    fontFamily: 'Aglet Sans'
+    fontFamily: 'Inter'
   );
 }
 
