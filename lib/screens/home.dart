@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:levaeu_app/components/gradient_button.dart';
 import 'package:levaeu_app/components/gradient_text.dart';
 import 'package:levaeu_app/components/logo.dart';
+
 import 'package:levaeu_app/screens/auth/sign_in.dart';
+import 'package:levaeu_app/screens/auth/sign_up.dart';
 
 import 'package:levaeu_app/theme.dart';
 
@@ -42,7 +45,9 @@ class Home extends StatelessWidget {
                   ),
                   SizedBox(height: 10.h),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, SignUp.routeName);
+                    },
                     child: const GradientText(
                       'Cadastrar',
                       gradient: appGradient

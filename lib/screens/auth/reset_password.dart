@@ -49,8 +49,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        leading: Container(
-          margin: const EdgeInsets.only(left: 20),
+        leading: Center(
           child: GestureDetector(
             onTap: () {
               Navigator.of(context).pop();
@@ -150,6 +149,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   }
   TextFormField buildEmailFormField() {
     return TextFormField(
+      keyboardType: TextInputType.emailAddress,
       onSaved: (value) {
         setState(() {
           user['email'] = value;

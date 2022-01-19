@@ -53,8 +53,7 @@ class _SignInState extends State<SignIn> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        leading: Container(
-          margin: const EdgeInsets.only(left: 20),
+        leading: Center(
           child: GestureDetector(
             onTap: () {
               Navigator.of(context).pop();
@@ -131,6 +130,7 @@ class _SignInState extends State<SignIn> {
   }
   TextFormField buildEmailFormField() {
     return TextFormField(
+      keyboardType: TextInputType.emailAddress,
       onSaved: (value) {
         setState(() {
           user['email'] = value;

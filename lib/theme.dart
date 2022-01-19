@@ -114,7 +114,7 @@ class AppTheme {
       label: Text(
         labelTextStr,
         style: TextStyle(
-          fontSize: 16.0.sp,
+          fontSize: 14.0.sp,
           fontWeight: FontWeight.w500,
           color: appInputTextColor
         ),
