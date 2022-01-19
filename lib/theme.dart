@@ -25,13 +25,16 @@ const appBorderColors    = Color(0xFFE5E5E5);
 const appDividerColor = Color(0xFFB4B4B4);
 const appBlackIconsColor = Color(0xFF404040);
 
+const appWhiteColor = Color(0xFFF8F8F8);
+const appBlackColor = Color(0xFF181818);
+
 const appGradient = LinearGradient(
   begin: Alignment.centerLeft,
   end: Alignment.centerRight,
   stops:  [0.0, 1.0],
   colors: [
-    appPrimaryColor,
     appSecondaryColor,
+    appPrimaryColor,
   ],
 );
 
@@ -53,7 +56,8 @@ ThemeData theme(context) {
           color: Colors.white,
           fontWeight: FontWeight.bold,
           fontSize: 16.0.sp
-        ))
+        )),
+        
       )
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
@@ -77,7 +81,7 @@ ThemeData theme(context) {
   );
 }
 
-class CustomStyle {
+class AppTheme {
   static InputDecoration textFieldStyle({
     required String labelTextStr,
     String hintTextStr = "",
