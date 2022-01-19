@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:levaeu_app/components/gradient_button.dart';
 import 'package:levaeu_app/components/gradient_text.dart';
+import 'package:levaeu_app/components/logo.dart';
+import 'package:levaeu_app/screens/auth/sign_in.dart';
 
 import 'package:levaeu_app/theme.dart';
 
@@ -27,43 +29,30 @@ class Home extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                    SizedBox(
-                      width: 150.w,
-                      child: Image.asset('assets/logos/logo-2x.png'),
+                  const Logo(),
+                  SizedBox(height: ScreenUtil().screenHeight/4),
+                  GradientButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, SignIn.routeName);
+                    },
+                    child: const Text('Entrar'),
+                    borderRadius: BorderRadius.circular(50),
+                    height: appButtonHeight,
+                    gradient: appGradient,
+                  ),
+                  SizedBox(height: 10.h),
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: const GradientText(
+                      'Cadastrar',
+                      gradient: appGradient
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 20.h),
-                      width: appComponentsWidth,
-                      child: Text(
-                        'Caronas rápidas e seguras à um click de distância!',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.normal
-                        )
-                      ),
+                    style: ButtonStyle(
+                      backgroundColor:  MaterialStateProperty.all<Color>(appWhiteColor),
                     ),
-                    SizedBox(height: ScreenUtil().screenHeight/4),
-                    GradientButton(
-                      onPressed: () {},
-                      child: const Text('Entrar'),
-                      borderRadius: BorderRadius.circular(50),
-                      width: appComponentsWidth,
-                      height: appButtonHeight,
-                      gradient: appGradient,
-                    ),
-                    SizedBox(height: 10.h),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: const GradientText(
-                        'Cadastrar',
-                        gradient: appGradient
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor:  MaterialStateProperty.all<Color>(appWhiteColor),
-                      ),
-                    ),
-                    SizedBox(height: 30.h),
-                    const Text('Versão 1.0.0')
+                  ),
+                  SizedBox(height: 30.h),
+                  const Text('Versão 1.0.0')
                 ],
               ),
             ),

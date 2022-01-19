@@ -39,6 +39,8 @@ const appGradient = LinearGradient(
 );
 
 var appButtonHeight = 45.0.h;
+var appButtonWidth = 280.w;
+
 var appComponentsWidth = 270.w;
 
 ThemeData theme(context) {
@@ -47,7 +49,7 @@ ThemeData theme(context) {
     scaffoldBackgroundColor: appBackgroundColor,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all<Size?>(Size(appComponentsWidth, appButtonHeight)),
+        fixedSize: MaterialStateProperty.all<Size?>(Size(appButtonWidth, appButtonHeight)),
         backgroundColor: MaterialStateProperty.all<Color>(appPrimaryColor),
         shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
@@ -66,7 +68,7 @@ ThemeData theme(context) {
           width: 2.0,
           color: appPrimaryColor
         )),
-        fixedSize: MaterialStateProperty.all<Size?>(Size(appComponentsWidth, appButtonHeight)),
+        fixedSize: MaterialStateProperty.all<Size?>(Size(appButtonWidth, appButtonHeight)),
         shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         )),
@@ -88,15 +90,15 @@ class AppTheme {
     CustomIcon? icon,
     GestureTapCallback? press,
   }) {
-    OutlineInputBorder normalBorder = OutlineInputBorder(
-      borderSide: const BorderSide(width: .5, color: appBorderColors),
-      borderRadius: BorderRadius.circular(11),
-    );
+    // OutlineInputBorder normalBorder = OutlineInputBorder(
+    //   borderSide: const BorderSide(width: .5, color: appPrimaryDarkColor),
+    //   borderRadius: BorderRadius.circular(11),
+    // );
 
-    OutlineInputBorder errorBorder = OutlineInputBorder(
-      borderSide: const BorderSide(color: Colors.red, width: 1),
-      borderRadius: BorderRadius.circular(11),
-    );
+    // OutlineInputBorder errorBorder = OutlineInputBorder(
+    //   borderSide: const BorderSide(color: Colors.red, width: 1),
+    //   borderRadius: BorderRadius.circular(11),
+    // );
 
     return InputDecoration(
       hintText: hintTextStr,
@@ -105,10 +107,9 @@ class AppTheme {
         child: icon,
       ) : null,
       fillColor: appInputBackground,
-      filled: true,
       constraints: BoxConstraints(
         minHeight: 64.h,
-        minWidth: 325.w,
+        minWidth: 300.w,
       ),
       label: Text(
         labelTextStr,
@@ -119,10 +120,10 @@ class AppTheme {
         ),
       ),
       
-      focusedBorder: normalBorder,
-      enabledBorder: normalBorder,
-      errorBorder: errorBorder,
-      focusedErrorBorder: errorBorder,
+      // focusedBorder: normalBorder,
+      // enabledBorder: normalBorder,
+      // errorBorder: errorBorder,
+      // focusedErrorBorder: errorBorder,
       errorStyle: const TextStyle(height: 0)
     );
   }
