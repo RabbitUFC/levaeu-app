@@ -50,19 +50,19 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: FaIcon(
                           FontAwesomeIcons.user,
-                          size: 40,
-                          color: appTextColor,
+                          size: 40.w,
+                          color: appTextLightColor,
                         ),
                       ),
-                      Text(
+                      const Text(
                         'Foto de perfil',
                         style: TextStyle(
-                          color: appTextColor,
+                          color: appTextLightColor,
                           fontWeight: FontWeight.bold
                         ),
                       )

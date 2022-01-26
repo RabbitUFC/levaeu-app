@@ -2,19 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:levaeu_app/screens/auth/sign_in.dart';
+import 'package:levaeu_app/utils/keyboard.dart';
 import 'package:mime/mime.dart';
+
+import 'package:levaeu_app/screens/auth/confirm_account.dart';
+import 'package:levaeu_app/screens/auth/sign_in.dart';
 
 import 'package:levaeu_app/components/profile_image_picker.dart';
 import 'package:levaeu_app/components/custom_suffix_icon.dart';
 import 'package:levaeu_app/components/form_error.dart';
 import 'package:levaeu_app/components/gradient_button.dart';
-import 'package:levaeu_app/screens/auth/reset_password.dart';
 
 import 'package:levaeu_app/theme.dart';
 import 'package:levaeu_app/utils/errors.dart';
 import 'package:levaeu_app/utils/helpers.dart';
 import 'package:levaeu_app/utils/toast.dart';
+
+import 'package:levaeu_app/services/auth.dart';
+import 'package:levaeu_app/services/general.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -37,19 +42,23 @@ class _SignUpState extends State<SignUp> {
     'gender': null,
     'email': '',
     'password': '',
-    'about': '',
+    // 'about': '',
     'userTypePreference': ''
   };
 
   List<DropdownMenuItem<String>> genders = [
-    const DropdownMenuItem(child: Text("Masculino"),value: "masculino"),
-    const DropdownMenuItem(child: Text("Feminino"),value: "feminino"),
-    const DropdownMenuItem(child: Text("Não informar"),value: "nao_informar"),
+    const DropdownMenuItem(child: Text("Masculino"), value: "male"),
+    const DropdownMenuItem(child: Text("Feminino"), value: "female"),
+    const DropdownMenuItem(child: Text("Não informar"), value: "other"),
   ];
 
   bool showPassword = false;
   bool loading = false;
   final List<String> errors = [];
+  final List<String> userTypePreferences = [
+    'passanger',
+    'driver'
+  ];
 
   void addError({required String error}) {
     if (!errors.contains(error)) {
@@ -82,6 +91,48 @@ class _SignUpState extends State<SignUp> {
       });
 
       Navigator.of(context).pop();
+    }
+  }
+
+  void signUp() async {
+    try {
+      if (userTypePreference == -1) {
+        setState(() {
+          userTypePreference = 1;
+        });
+      }
+      setState(() {
+        loading = true;
+        user['userTypePreference'] = userTypePreferences[userTypePreference-1];
+      });
+      var response = await AuthService().signUp(data: user, context: context);
+
+      if (response != null) {
+        if (response['putUrl'] != null) {
+          await GeneralService()
+            .uploadToSignedUrl(
+              file: photo,
+              signedUrl: response['putUrl'],
+              imageType: user['imageType']
+            );
+        }
+        toast(
+          message: 'A sua conta foi criada com sucesso.\nVocê só precisa confirmar o seu email.',
+          type: 'success',
+        );
+        setState(() {
+          loading = false;
+        });
+        Navigator.pushNamed(context, ConfirmAccount.routeName);
+      } else {
+        setState(() {
+          loading = false;
+        });
+      }
+    } catch (err) {
+      setState(() {
+        loading = false;
+      });
     }
   }
 
@@ -158,10 +209,10 @@ class _SignUpState extends State<SignUp> {
                             margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
                             child: buildPasswordFormField(),
                           ),
-                          Container(
-                            margin: const EdgeInsets.only(top: 30.0, bottom: 10.0),
-                            child: buildAboutFormField(),
-                          ),
+                          // Container(
+                          //   margin: const EdgeInsets.only(top: 30.0, bottom: 10.0),
+                          //   child: buildAboutFormField(),
+                          // ),
                         ]
                       )
                     ),
@@ -222,21 +273,45 @@ class _SignUpState extends State<SignUp> {
                   FormError(errors: errors),
                   SizedBox(height: 20.h),
                   GradientButton(
-                    onPressed: () {
+                    onPressed: loading 
+                    ? null
+                    : () {
                       var isValid = _formKey.currentState?.validate();
+                      if(isValid == true) {
+                        _formKey.currentState?.save();
+                        KeyboardUtil.hideKeyboard(context);
+                        signUp();
+                      }
                     },
-                    child: const Text('Finalizar cadastro'),
+                    child: loading
+                    ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3),
+                    )
+                    : const Text('Finalizar cadastro'),
                     borderRadius: BorderRadius.circular(50),
                     height: appButtonHeight,
                     gradient: appGradient,
                   ),
-                  SizedBox(height: 20.h),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, SignIn.routeName);
-                    },
-                    child: const Text('Já tem uma conta? Faça login!'),
-                  )
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 20.h),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, SignIn.routeName);
+                      },
+                      child: const Text('Já tem uma conta? Faça login!'),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 20.h),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, ConfirmAccount.routeName);
+                      },
+                      child: const Text('Já possui um código de confirmação? Clique aqui!'),
+                    ),
+                  ),
                 ],
               ),
             ),
