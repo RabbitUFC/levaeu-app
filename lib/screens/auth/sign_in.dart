@@ -7,9 +7,12 @@ import 'package:levaeu_app/components/form_error.dart';
 import 'package:levaeu_app/components/gradient_button.dart';
 import 'package:levaeu_app/components/logo.dart';
 import 'package:levaeu_app/screens/auth/reset_password.dart';
+import 'package:levaeu_app/screens/passenger/home.dart';
+import 'package:levaeu_app/services/auth.dart';
 
 import 'package:levaeu_app/theme.dart';
 import 'package:levaeu_app/utils/errors.dart';
+import 'package:levaeu_app/utils/keyboard.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -43,6 +46,30 @@ class _SignInState extends State<SignIn> {
     if (errors.contains(error)) {
       setState(() {
         errors.remove(error);
+      });
+    }
+  }
+
+  void signIn() async {
+    try {
+      setState(() {
+        loading = true;
+      });
+      var response = await AuthService().signIn(data: user, context: context);
+
+      if (response != null) {
+        setState(() {
+          loading = false;
+        });
+        Navigator.pushNamed(context, PassengerHome.routeName);
+      } else {
+        setState(() {
+          loading = false;
+        });
+      }
+    } catch (err) {
+      setState(() {
+        loading = false;
       });
     }
   }
@@ -105,10 +132,23 @@ class _SignInState extends State<SignIn> {
                   FormError(errors: errors),
                   SizedBox(height: 30.h),
                   GradientButton(
-                    onPressed: () {
+                    onPressed: loading
+                    ? null
+                    : () {
                       var isValid = _formKey.currentState?.validate();
+                      if(isValid == true) {
+                        _formKey.currentState?.save();
+                        KeyboardUtil.hideKeyboard(context);
+                        signIn();
+                      }
                     },
-                    child: const Text('Entrar'),
+                    child: loading
+                    ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3),
+                    )
+                    : const Text('Entrar'),
                     borderRadius: BorderRadius.circular(50),
                     height: appButtonHeight,
                     gradient: appGradient,
