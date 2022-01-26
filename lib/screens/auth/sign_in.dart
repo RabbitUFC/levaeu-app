@@ -6,7 +6,7 @@ import 'package:levaeu_app/components/custom_suffix_icon.dart';
 import 'package:levaeu_app/components/form_error.dart';
 import 'package:levaeu_app/components/gradient_button.dart';
 import 'package:levaeu_app/components/logo.dart';
-import 'package:levaeu_app/screens/auth/reset_password.dart';
+import 'package:levaeu_app/screens/auth/recover_password.dart';
 import 'package:levaeu_app/screens/passenger/home.dart';
 import 'package:levaeu_app/services/auth.dart';
 
@@ -57,10 +57,11 @@ class _SignInState extends State<SignIn> {
       });
       var response = await AuthService().signIn(data: user, context: context);
 
-      if (response != null) {
+      if (response != null && response['success'] == true) {
         setState(() {
           loading = false;
         });
+        // @Todo - save the token in hive
         Navigator.pushNamed(context, PassengerHome.routeName);
       } else {
         setState(() {
@@ -156,7 +157,7 @@ class _SignInState extends State<SignIn> {
                   SizedBox(height: 20.h),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, ResetPassword.routeName);
+                      Navigator.pushNamed(context, RecoverPassword.routeName);
                     },
                     child: const Text('Esqueceu a sua senha?'),
                   )

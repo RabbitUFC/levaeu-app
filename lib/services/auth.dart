@@ -25,6 +25,26 @@ class AuthService {
     }
   }
 
+  recoverPassword({required Map data, required context}) async {
+    var dio = Dio();
+    try {
+      final response = await dio.post('$_baseUrl/recover-password', data: data);
+      return response.data;
+    } on DioError catch (err) {
+      handleError(err, err.response?.statusCode, context);
+    }
+  }
+
+  resetPassword({required Map data, required context}) async {
+    var dio = Dio();
+    try {
+      final response = await dio.put('$_baseUrl/reset-password', data: data);
+      return response.data;
+    } on DioError catch (err) {
+      handleError(err, err.response?.statusCode, context);
+    }
+  }
+
   confirmAccount({required Map data, required context}) async {
     var dio = Dio();
     try {
