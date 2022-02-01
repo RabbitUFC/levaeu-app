@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:levaeu_app/screens/initial_screen.dart';
 
+import 'package:levaeu_app/hive/user.dart';
+
 import 'package:levaeu_app/theme.dart';
 import 'package:levaeu_app/routes.dart';
+import 'package:levaeu_app/utils/hive.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserAdapter());
+
+  await Hive.openBox(userBox);
+
   runApp(const App());
 }
 
