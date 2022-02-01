@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 
 import 'package:levaeu_app/components/custom_suffix_icon.dart';
@@ -14,6 +15,8 @@ import 'package:levaeu_app/theme.dart';
 import 'package:levaeu_app/utils/errors.dart';
 import 'package:levaeu_app/utils/keyboard.dart';
 import 'package:levaeu_app/utils/toast.dart';
+import 'package:levaeu_app/utils/hive.dart';
+import 'package:levaeu_app/hive/user.dart';
 
 class ConfirmAccount extends StatefulWidget {
   const ConfirmAccount({Key? key}) : super(key: key);
@@ -26,6 +29,7 @@ class ConfirmAccount extends StatefulWidget {
 class _ConfirmAccountState extends State<ConfirmAccount> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _pinPutController = TextEditingController();
+  var box = Hive.box(userBox);
   
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
@@ -77,8 +81,22 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
             message: 'A sua conta foi confirmada com sucesso.',
             type: 'success',
           );
-          // @ToDo save token in Hive
-          Navigator.pushNamed(context, Home.routeName);
+          var user = box.get('user');
+
+          if (user == null) {
+            var _user = User(
+              id: response['data']['_id'],
+              jwtToken: response['data']['token'],
+              name: response['data']['name'],
+              photo: response['data']['photo'],
+              selectedType: response['data']['userTypePreference'],
+              isSignedIn: true,
+            );
+            box.put('user', _user);
+            user = box.get('user');
+          }
+          Navigator.of(context)
+            .pushNamedAndRemoveUntil(Home.routeName, (Route<dynamic> route) => false);
         } else {
           setState(() {
             loading = false;
