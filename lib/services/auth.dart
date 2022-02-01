@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:levaeu_app/screens/auth/confirm_account.dart';
 import 'package:levaeu_app/services/utils.dart';
 
 class AuthService {

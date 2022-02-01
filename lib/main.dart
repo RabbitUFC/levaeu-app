@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 
-import 'package:levaeu_app/screens/home.dart';
+import 'package:levaeu_app/screens/initial_screen.dart';
 
 import 'package:levaeu_app/theme.dart';
 import 'package:levaeu_app/routes.dart';
@@ -41,6 +41,6 @@ class AppHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.setContext(context);
-    return const Home();
+    return const InitialScreen();
   }
 }

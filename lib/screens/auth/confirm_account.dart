@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pinput/pin_put/pin_put.dart';
 
 import 'package:levaeu_app/components/custom_suffix_icon.dart';
 import 'package:levaeu_app/components/form_error.dart';
 import 'package:levaeu_app/components/gradient_button.dart';
-import 'package:levaeu_app/screens/passenger/home.dart';
+import 'package:levaeu_app/screens/home/home.dart';
+
 import 'package:levaeu_app/services/auth.dart';
 
 import 'package:levaeu_app/theme.dart';
 import 'package:levaeu_app/utils/errors.dart';
 import 'package:levaeu_app/utils/keyboard.dart';
 import 'package:levaeu_app/utils/toast.dart';
-import 'package:pinput/pin_put/pin_put.dart';
 
 class ConfirmAccount extends StatefulWidget {
   const ConfirmAccount({Key? key}) : super(key: key);
@@ -77,7 +78,7 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
             type: 'success',
           );
           // @ToDo save token in Hive
-          Navigator.pushNamed(context, PassengerHome.routeName);
+          Navigator.pushNamed(context, Home.routeName);
         } else {
           setState(() {
             loading = false;

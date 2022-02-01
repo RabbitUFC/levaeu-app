@@ -10,8 +10,8 @@ import 'package:levaeu_app/screens/auth/sign_up.dart';
 
 import 'package:levaeu_app/theme.dart';
 
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+class InitialScreen extends StatelessWidget {
+  const InitialScreen({Key? key}) : super(key: key);
   static String routeName = "/auth";
 
   @override

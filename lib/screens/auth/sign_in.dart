@@ -7,7 +7,8 @@ import 'package:levaeu_app/components/form_error.dart';
 import 'package:levaeu_app/components/gradient_button.dart';
 import 'package:levaeu_app/components/logo.dart';
 import 'package:levaeu_app/screens/auth/recover_password.dart';
-import 'package:levaeu_app/screens/passenger/home.dart';
+import 'package:levaeu_app/screens/home/home.dart';
+
 import 'package:levaeu_app/services/auth.dart';
 
 import 'package:levaeu_app/theme.dart';
@@ -62,7 +63,7 @@ class _SignInState extends State<SignIn> {
           loading = false;
         });
         // @Todo - save the token in hive
-        Navigator.pushNamed(context, PassengerHome.routeName);
+        Navigator.pushNamed(context, Home.routeName);
       } else {
         setState(() {
           loading = false;
