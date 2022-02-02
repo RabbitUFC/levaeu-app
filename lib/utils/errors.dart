@@ -9,6 +9,10 @@ const String passwordNullError = "Por favor informe a sua senha";
 const String shortPasswordError = "A senha deve conter no mínimo 8 caracteres";
 const String matchPasswordError = "As senhas informadas não são iguais";
 
+const String startLocationNullError = "Por favor selecione o bairro inicial da carona";
+const String endLocationNullError = "Por favor selecione o bairro final da carona";
+const String pickuptPointNullError = "Por favor selecione pelo menos um ponto de encontro";
+
 const String invalidEmailError = "Por favor informe um e-mail válido";
 const String acceptTermsError = "Por favor leia e aceite os Termos de uso e Privacidade";
 

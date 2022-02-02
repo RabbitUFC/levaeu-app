@@ -183,6 +183,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.1"
+  date_time_picker:
+    dependency: "direct main"
+    description:
+      name: date_time_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   dio:
     dependency: "direct main"
     description:
@@ -190,6 +197,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.4"
+  dropdown_search:
+    dependency: "direct main"
+    description:
+      name: dropdown_search
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -329,6 +343,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  hive_generator:
+    dependency: "direct dev"
+    description:
+      name: hive_generator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.2"
   http:
     dependency: "direct main"
     description:
@@ -518,6 +539,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.11.1"
+  persistent_bottom_nav_bar:
+    dependency: "direct main"
+    description:
+      name: persistent_bottom_nav_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.2"
   petitparser:
     dependency: transitive
     description:
@@ -588,11 +616,32 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  skeletons:
+    dependency: "direct main"
+    description:
+      name: skeletons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   sky_engine:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.99"
+  source_gen:
+    dependency: transitive
+    description:
+      name: source_gen
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.1"
+  source_helper:
+    dependency: transitive
+    description:
+      name: source_helper
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.1"
   source_span:
     dependency: transitive
     description:
@@ -649,6 +698,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  transparent_image:
+    dependency: "direct main"
+    description:
+      name: transparent_image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   typed_data:
     dependency: transitive
     description:

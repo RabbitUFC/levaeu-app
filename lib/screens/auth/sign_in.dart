@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:levaeu_app/components/custom_suffix_icon.dart';
 import 'package:levaeu_app/components/form_error.dart';
 import 'package:levaeu_app/components/gradient_button.dart';
 import 'package:levaeu_app/components/logo.dart';
+import 'package:levaeu_app/hive/user.dart';
 import 'package:levaeu_app/screens/auth/recover_password.dart';
-import 'package:levaeu_app/screens/passenger/home.dart';
+import 'package:levaeu_app/screens/home/home_pageview.dart';
+
 import 'package:levaeu_app/services/auth.dart';
 
 import 'package:levaeu_app/theme.dart';
 import 'package:levaeu_app/utils/errors.dart';
+import 'package:levaeu_app/utils/hive.dart';
 import 'package:levaeu_app/utils/keyboard.dart';
 
 class SignIn extends StatefulWidget {
@@ -24,6 +28,7 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
+  var box = Hive.box(userBox);
 
   Map user = {
     'email': '',
@@ -61,8 +66,22 @@ class _SignInState extends State<SignIn> {
         setState(() {
           loading = false;
         });
-        // @Todo - save the token in hive
-        Navigator.pushNamed(context, PassengerHome.routeName);
+        var user = box.get('user');
+
+        if (user == null) {
+          var _user = User(
+            id: response['data']['_id'],
+            jwtToken: response['data']['token'],
+            name: response['data']['name'],
+            photo: response['data']['photo'],
+            selectedType: response['data']['userTypePreference'],
+            isSignedIn: true,
+          );
+          box.put('user', _user);
+          user = box.get('user');
+        }
+        Navigator.of(context)
+          .pushNamedAndRemoveUntil(HomePageView.routeName, (Route<dynamic> route) => false);
       } else {
         setState(() {
           loading = false;
@@ -73,6 +92,40 @@ class _SignInState extends State<SignIn> {
         loading = false;
       });
     }
+  }
+
+  _showDialog() async {
+    await Future.delayed(const Duration(milliseconds: 50));
+    showDialog(
+      barrierDismissible: false,
+      builder: (ctx) {
+        return const Center(
+          child: CircularProgressIndicator(
+            color: appPrimaryColor,
+            strokeWidth: 2,
+          ),
+        );
+      },
+      context: context,
+    );
+  }
+
+  verifyIfIsAuthenticated () async {
+    await Future.delayed(const Duration(seconds: 1));
+    var user = box.get('user');
+    if(user != null) {
+      Navigator.of(context, rootNavigator: true).pop();
+      await Future.delayed(const Duration(milliseconds: 50));
+      Navigator.of(context)
+        .pushNamedAndRemoveUntil(HomePageView.routeName, (Route<dynamic> route) => false);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _showDialog();
+    verifyIfIsAuthenticated();
   }
 
   @override
