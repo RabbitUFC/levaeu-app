@@ -3,17 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import 'package:levaeu_app/components/form_error.dart';
+import 'package:levaeu_app/hive/user.dart';
 import 'package:levaeu_app/models/district_model.dart';
 import 'package:levaeu_app/models/pickup_point_model.dart';
 import 'package:levaeu_app/services/districts.dart';
 import 'package:levaeu_app/services/pickup_points.dart';
+import 'package:levaeu_app/services/rides.dart';
 
 import 'package:levaeu_app/theme.dart';
 import 'package:levaeu_app/utils/errors.dart';
+import 'package:levaeu_app/utils/hive.dart';
 import 'package:levaeu_app/utils/keyboard.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:levaeu_app/utils/toast.dart';
 
 class CreateRide extends StatefulWidget {
   const CreateRide({Key? key}) : super(key: key);
@@ -25,6 +30,7 @@ class CreateRide extends StatefulWidget {
 
 class _CreateRideState extends State<CreateRide> {
   final _formKey = GlobalKey<FormState>();
+  var box = Hive.box(userBox);
 
   List<dynamic> districts = [];
   Map ride = {
@@ -58,6 +64,25 @@ class _CreateRideState extends State<CreateRide> {
   }
 
   void create() async {
+    User user = box.get('user');
+    setState(() {
+      ride['driver'] = user.id;
+      loading = true;
+    });
+
+    var response = await RidesService().create(data: ride, context: context);
+
+    if (response != null && response['success']) {
+      toast(
+        message: 'Carona criada com sucesso!',
+        type: 'success',
+        context: context
+      );
+    }
+
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -112,7 +137,7 @@ class _CreateRideState extends State<CreateRide> {
                           margin: const EdgeInsets.only(top: 10.0),
                           child: locationDropdown(
                             label: 'Ponto final',
-                            attribute: 'startLocation',
+                            attribute: 'endLocation',
                             error: endLocationNullError
                           ),
                         ),
@@ -124,39 +149,75 @@ class _CreateRideState extends State<CreateRide> {
                           margin: const EdgeInsets.only(top: 10.0),
                           child: dateTimeFormField(),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(top: 20.0, bottom: 10.0),
-                              child: Text(
-                                'Vagas:',
+                        Container(
+                          width: appComponentsWidth,
+                          margin: const EdgeInsets.only(top: 30.0, bottom: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Vagas disponíveis:',
                                 style: TextStyle(
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.bold
                                 ),
                               ),
-                            ),
-                            Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.minimize_outlined
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (ride['passengersAmount'] > 1) {
+                                        setState(() {
+                                          ride['passengersAmount'] = ride['passengersAmount'] - 1;
+                                        });
+                                      }
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(6.0),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: appSecondaryColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(50.0),
+                                      ),
+                                      child: const Icon(
+                                          FontAwesomeIcons.minus,
+                                          size: 12,
+                                        )
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                                    child: Text(
+                                      '${ride['passengersAmount']}',
+                                      style: TextStyle(
+                                        fontSize: 16.sp
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (ride['passengersAmount'] < 7) {
+                                        setState(() {
+                                          ride['passengersAmount'] = ride['passengersAmount'] + 1;
+                                        });
+                                      }
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8.0),
+                                      decoration: BoxDecoration(
+                                        color: appSecondaryColor,
+                                        borderRadius: BorderRadius.circular(50.0),
+                                      ),
+                                      child: const Icon(
+                                          FontAwesomeIcons.plus,
+                                          color: Colors.white,
+                                          size: 12,
+                                        )
+                                    ),
                                   )
-                                ),
-                                Text(
-                                  ride['passengersAmount']
-                                ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    FontAwesomeIcons.plus
-                                  )
-                                )
-                              ],
-                            )
-                          ],
+                                ],
+                              )
+                            ],
+                          )
                         ),
                         Container(
                           width: appComponentsWidth,
@@ -353,18 +414,16 @@ class _CreateRideState extends State<CreateRide> {
           )
         ),
       ),
-      onSaved: (value) {
-        // setState(() {
-        //   ride[attribute] = value?.id;
-        // });
+      onSaved: (List<PickupPointModel>? values) {
+        if(values != null) {
+          setState(() {
+            ride['pickupPoints'] = values.map((item) => item.id).toList();
+          });
+        }
       },
       onChanged: (List<PickupPointModel> values) {
         if (values.isNotEmpty) {
           removeError(error: pickuptPointNullError);
-        } else {
-          setState(() {
-            ride['pickupPoints'] = values.map((item) => item.id).toList();
-          });
         }
       },
       validator: (List<PickupPointModel>? values) {
@@ -389,19 +448,18 @@ class _CreateRideState extends State<CreateRide> {
       dateLabelText: 'Data',
       timeLabelText: "Horário",
       selectableDayPredicate: (date) {
-        // Disable weekend days to select from the calendar
-        if (date.weekday == 6 || date.weekday == 7) {
-          return false;
-        }
-
         return true;
       },
-      onChanged: (val) => print(val),
-      validator: (val) {
-        print(val);
-        return null;
+      onChanged: (val) {
+        setState(() {
+          ride['date'] = val;
+        });
       },
-      onSaved: (val) => print(val),
+      onSaved: (val) {
+        setState(() {
+          ride['date'] = val;
+        });
+      },
     );
   }
 
