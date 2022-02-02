@@ -10,6 +10,7 @@ import 'package:levaeu_app/components/logo.dart';
 import 'package:levaeu_app/hive/user.dart';
 import 'package:levaeu_app/screens/auth/recover_password.dart';
 import 'package:levaeu_app/screens/home/home.dart';
+import 'package:levaeu_app/screens/home/home_pageview.dart';
 
 import 'package:levaeu_app/services/auth.dart';
 
@@ -81,7 +82,7 @@ class _SignInState extends State<SignIn> {
           user = box.get('user');
         }
         Navigator.of(context)
-          .pushNamedAndRemoveUntil(Home.routeName, (Route<dynamic> route) => false);
+          .pushNamedAndRemoveUntil(HomePageView.routeName, (Route<dynamic> route) => false);
       } else {
         setState(() {
           loading = false;

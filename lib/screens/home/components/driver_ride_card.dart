@@ -3,25 +3,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:levaeu_app/theme.dart';
 import 'package:levaeu_app/utils/helpers.dart';
 
-class RideCard extends StatelessWidget {
-  const RideCard({
+class DriverRideCard extends StatelessWidget {
+  const DriverRideCard({
     Key? key,
-    required this.driver,
     required this.startLocation,
     required this.endLocation,
     required this.date,
     required this.numberOfPassengers,
     required this.totalVacancies,
-    required this.pickupPoints,
   }) : super(key: key);
 
-  final Map driver;
   final String startLocation;
   final String endLocation;
   final String date;
   final int numberOfPassengers;
   final int totalVacancies;
-  final List<dynamic> pickupPoints;
 
   @override
   Widget build(BuildContext context) {
@@ -47,34 +43,14 @@ class RideCard extends StatelessWidget {
                     height: 45.0.w,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      border: Border.all(color: appPrimaryColor, width: 2),
+                      border: Border.all(color: appSecondaryColor, width: 2),
                       borderRadius: const BorderRadius.all(Radius.circular(50)),
-                      image: driver['photo'] != null
-                        ? DecorationImage(
-                          image: NetworkImage( driver['photo']),
-                          fit: BoxFit.cover,
-                        )
-                        : null
                     ),
-                    child:  driver['photo'] == null
-                      ? const Icon(
-                        Icons.person,
-                        color: appTextLightColor,
-                      )
-                      : null,
+                    child: const Icon(
+                      Icons.place_outlined,
+                      color: appSecondaryColor,
+                    )
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      driver['name'],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: appTextLightColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13.sp
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),
@@ -136,28 +112,6 @@ class RideCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Text.rich(
-                        TextSpan(
-                          style: TextStyle(
-                            color: appTextLightColor,
-                            fontSize: 12.sp,
-                          ),
-                          children: [
-                            const TextSpan(
-                              text: "Pontos de encontro: ",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            ...[
-                              for (var index = 0; index < pickupPoints.length; index++)
-                                TextSpan(
-                                  text: "${pickupPoints[index]['name']}${index < pickupPoints.length - 1 ? ', ' : ''}",
-                                ),
-                            ]
-                          ]
-                        ),
-                      )
                     ],
                   ),
                   Column(

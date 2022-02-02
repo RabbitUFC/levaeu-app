@@ -9,6 +9,8 @@ import 'package:levaeu_app/screens/auth/recover_password.dart';
 import 'package:levaeu_app/screens/auth/reset_password.dart';
 import 'package:levaeu_app/screens/auth/confirm_account.dart';
 import 'package:levaeu_app/screens/home/home.dart';
+import 'package:levaeu_app/screens/home/home_pageview.dart';
+import 'package:levaeu_app/screens/home/create_ride.dart';
 
 final Map<String, WidgetBuilder> routes = {
   InitialScreen.routeName: (context) => const InitialScreen(),
@@ -18,4 +20,6 @@ final Map<String, WidgetBuilder> routes = {
   ResetPassword.routeName: (context) => const ResetPassword(),
   ConfirmAccount.routeName: (context) => const ConfirmAccount(),
   Home.routeName: (context) => const Home(),
+  HomePageView.routeName: (context) => const HomePageView(),
+  CreateRide.routeName: (context) => const CreateRide(),
 };

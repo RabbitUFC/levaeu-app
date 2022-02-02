@@ -38,6 +38,7 @@ class LevaEuAppBar extends StatelessWidget with PreferredSizeWidget {
             child: const FaIcon(
               Icons.menu,
               color: appTextLightColor,
+              size: 32
             ),
           ),
         ),
@@ -56,6 +57,7 @@ class LevaEuAppBar extends StatelessWidget with PreferredSizeWidget {
                 child: const FaIcon(
                   Icons.compare_arrows,
                   color: appTextLightColor,
+                  size: 32
                 ),
               ),
             ),
