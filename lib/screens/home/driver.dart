@@ -24,7 +24,7 @@ class _DriverHomeState extends State<DriverHome> {
   Box box = Hive.box(userBox);
   String? userID;
 
-  bool activeRidesSelected = false;
+  bool activeRidesSelected = true;
   bool loadingActiveRides = true;
   bool loadingFinishedRides = true;
 

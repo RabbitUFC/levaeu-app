@@ -40,7 +40,7 @@ dependencies:
   dropdown_search: ^2.0.1
   transparent_image: ^2.0.0
   date_time_picker: "^2.1.0"
-  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -41,7 +41,7 @@ class _CreateRideState extends State<CreateRide> {
     'date': '',
     'passengersAmount': 1,
     'active': true,
-    'additionalInformation': ''
+    'additionalInformation': null
   };
 
   bool loading = false;
@@ -71,18 +71,18 @@ class _CreateRideState extends State<CreateRide> {
     });
 
     var response = await RidesService().create(data: ride, context: context);
-
+    setState(() {
+      loading = false;
+    });
     if (response != null && response['success']) {
       toast(
         message: 'Carona criada com sucesso!',
         type: 'success',
         context: context
       );
+      Navigator.pop(context);
     }
 
-    setState(() {
-      loading = false;
-    });
   }
 
   @override
@@ -114,8 +114,8 @@ class _CreateRideState extends State<CreateRide> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: (ScreenUtil().screenWidth - appComponentsWidth)/2),
+          child: Center(
+            // margin: EdgeInsets.symmetric(horizontal: (ScreenUtil().screenWidth - appComponentsWidth)/2),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -530,7 +530,26 @@ class _CreateRideState extends State<CreateRide> {
               ),
             )
           ),
-          title: Text(item.name),
+          title: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: '${item.name}\n',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600
+                  )
+                ),
+                TextSpan(
+                  text: item.district,
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: appTextLightColor
+                  )
+                ),
+              ]
+            )
+          ),
         )
       );
   }

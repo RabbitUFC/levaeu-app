@@ -20,7 +20,7 @@ class PassengerHome extends StatefulWidget {
 }
 
 class _PassengerHomeState extends State<PassengerHome> {
-  bool startsAtUFCSelected = false;
+  bool startsAtUFCSelected = true;
   bool loadingStartsAtUFC = true;
   bool loadingEndsAtUFC = true;
 
@@ -28,6 +28,7 @@ class _PassengerHomeState extends State<PassengerHome> {
   List<dynamic> endsAtUFCRides = [];
 
   void getStartsAtUFC() async {
+    getEndsAtUFC();
     var response = await RidesService().list(
       query: {
         'startLocationByName': 'UFC'
@@ -36,8 +37,8 @@ class _PassengerHomeState extends State<PassengerHome> {
     );
 
     setState(() {
-      loadingStartsAtUFC = false;
       startsAtUFCRides = response['data'];
+      loadingStartsAtUFC = false;
     });
   }
 
@@ -50,8 +51,8 @@ class _PassengerHomeState extends State<PassengerHome> {
     );
 
     setState(() {
-      loadingEndsAtUFC = false;
       endsAtUFCRides = response['data'];
+      loadingEndsAtUFC = false;
     });
   }
 
@@ -68,7 +69,6 @@ class _PassengerHomeState extends State<PassengerHome> {
   void initState() {
     super.initState();
     getStartsAtUFC();
-    getEndsAtUFC();
   }
   
   @override
@@ -184,16 +184,18 @@ class _PassengerHomeState extends State<PassengerHome> {
                           if (startsAtUFCRides.isEmpty)
                             const NoRidesCard(),
 
-                          for (var ridesIndex = 0; ridesIndex < startsAtUFCRides.length; ridesIndex++)
-                            RideCard(
-                              driver: startsAtUFCRides[ridesIndex]['driver'],
-                              startLocation: startsAtUFCRides[ridesIndex]['startLocation']['name'],
-                              endLocation: startsAtUFCRides[ridesIndex]['endLocation']['name'],
-                              date: startsAtUFCRides[ridesIndex]['date'],
-                              numberOfPassengers: startsAtUFCRides[ridesIndex]['passengers'].length,
-                              totalVacancies: startsAtUFCRides[ridesIndex]['passengersAmount'],
-                              pickupPoints: startsAtUFCRides[ridesIndex]['pickupPoints'],
-                            )
+                          if(startsAtUFCRides.isNotEmpty)
+                            for (var ridesIndex = 0; ridesIndex < startsAtUFCRides.length; ridesIndex++)
+                              RideCard(
+                                rideID: startsAtUFCRides[ridesIndex]['_id'],
+                                driver: startsAtUFCRides[ridesIndex]['driver'],
+                                startLocation: startsAtUFCRides[ridesIndex]['startLocation']['name'],
+                                endLocation: startsAtUFCRides[ridesIndex]['endLocation']['name'],
+                                date: startsAtUFCRides[ridesIndex]['date'],
+                                numberOfPassengers: startsAtUFCRides[ridesIndex]['passengers'].length,
+                                totalVacancies: startsAtUFCRides[ridesIndex]['passengersAmount'],
+                                pickupPoints: startsAtUFCRides[ridesIndex]['pickupPoints'],
+                              )
                         ]
                     else
                       if (loadingEndsAtUFC)
@@ -207,16 +209,17 @@ class _PassengerHomeState extends State<PassengerHome> {
                           if (endsAtUFCRides.isEmpty)
                             const NoRidesCard(),
 
-                          for (var ridesIndex = 0; ridesIndex < endsAtUFCRides.length; ridesIndex++)
-                            RideCard(
-                              driver: endsAtUFCRides[ridesIndex]['driver'],
-                              startLocation: endsAtUFCRides[ridesIndex]['startLocation']['name'],
-                              endLocation: endsAtUFCRides[ridesIndex]['endLocation']['name'],
-                              date: endsAtUFCRides[ridesIndex]['date'],
-                              numberOfPassengers: endsAtUFCRides[ridesIndex]['passengers'].length,
-                              totalVacancies: endsAtUFCRides[ridesIndex]['passengersAmount'],
-                              pickupPoints: endsAtUFCRides[ridesIndex]['pickupPoints'],
-                            )
+                            for (var ridesIndex = 0; ridesIndex < endsAtUFCRides.length; ridesIndex++)
+                              RideCard(
+                                rideID: endsAtUFCRides[ridesIndex]['_id'],
+                                driver: endsAtUFCRides[ridesIndex]['driver'],
+                                startLocation: endsAtUFCRides[ridesIndex]['startLocation']['name'],
+                                endLocation: endsAtUFCRides[ridesIndex]['endLocation']['name'],
+                                date: endsAtUFCRides[ridesIndex]['date'],
+                                numberOfPassengers: endsAtUFCRides[ridesIndex]['passengers'].length,
+                                totalVacancies: endsAtUFCRides[ridesIndex]['passengersAmount'],
+                                pickupPoints: endsAtUFCRides[ridesIndex]['pickupPoints'],
+                              )
                         ]
                   ],
                 ),

@@ -23,4 +23,14 @@ class RidesService {
       handleError(err, err.response?.statusCode, context);
     }
   }
+
+  retrieve({required String id, required context}) async {
+    var dio = Dio();
+    try {
+      final response = await dio.get('$_baseUrl/$id');
+      return response.data;
+    } on DioError catch (err) {
+      handleError(err, err.response?.statusCode, context);
+    }
+  }
 }
