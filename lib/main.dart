@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:levaeu_app/screens/initial_screen.dart';
 
@@ -38,6 +39,15 @@ class App extends StatelessWidget {
           theme: theme(context),
           home: const AppHome(),
           debugShowCheckedModeBanner: false,
+          localizationsDelegates: const [
+            GlobalWidgetsLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en', 'US'),
+            Locale('pt', 'BR'),
+          ]
         )
       )
     );

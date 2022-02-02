@@ -60,6 +60,7 @@ class _HomePageViewState extends State<HomePageView> {
         ),
       if (userType == 'driver')
           PersistentBottomNavBarItem(
+          contentPadding: 5,
           icon: GestureDetector(
             onTap: () {
               pushNewScreen(

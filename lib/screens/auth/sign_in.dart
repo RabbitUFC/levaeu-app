@@ -9,7 +9,6 @@ import 'package:levaeu_app/components/gradient_button.dart';
 import 'package:levaeu_app/components/logo.dart';
 import 'package:levaeu_app/hive/user.dart';
 import 'package:levaeu_app/screens/auth/recover_password.dart';
-import 'package:levaeu_app/screens/home/home.dart';
 import 'package:levaeu_app/screens/home/home_pageview.dart';
 
 import 'package:levaeu_app/services/auth.dart';
@@ -93,6 +92,40 @@ class _SignInState extends State<SignIn> {
         loading = false;
       });
     }
+  }
+
+  _showDialog() async {
+    await Future.delayed(const Duration(milliseconds: 50));
+    showDialog(
+      barrierDismissible: false,
+      builder: (ctx) {
+        return const Center(
+          child: CircularProgressIndicator(
+            color: appPrimaryColor,
+            strokeWidth: 2,
+          ),
+        );
+      },
+      context: context,
+    );
+  }
+
+  verifyIfIsAuthenticated () async {
+    await Future.delayed(const Duration(seconds: 1));
+    var user = box.get('user');
+    if(user != null) {
+      Navigator.of(context, rootNavigator: true).pop();
+      await Future.delayed(const Duration(milliseconds: 50));
+      Navigator.of(context)
+        .pushNamedAndRemoveUntil(HomePageView.routeName, (Route<dynamic> route) => false);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _showDialog();
+    verifyIfIsAuthenticated();
   }
 
   @override
