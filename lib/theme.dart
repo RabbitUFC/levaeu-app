@@ -59,7 +59,6 @@ ThemeData theme(context) {
           fontWeight: FontWeight.bold,
           fontSize: 16.0.sp
         )),
-        
       )
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(

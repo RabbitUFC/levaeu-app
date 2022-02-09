@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:levaeu_app/components/loading_carousel.dart';
 import 'package:levaeu_app/components/loading_list.dart';
+import 'package:levaeu_app/hive/user.dart';
 import 'package:levaeu_app/screens/home/components/driver_ride_card.dart';
 import 'package:levaeu_app/services/rides.dart';
+import 'package:levaeu_app/services/rides_requests.dart';
 import 'package:levaeu_app/theme.dart';
+import 'package:levaeu_app/utils/hive.dart';
+import 'package:levaeu_app/utils/toast.dart';
 
 class RideScreen extends StatefulWidget {
   const RideScreen({
@@ -21,7 +26,12 @@ class RideScreen extends StatefulWidget {
 }
 
 class _RideScreenState extends State<RideScreen> {
+  var box = Hive.box(userBox);
+
   bool loadingRideData = true;
+  bool creatingRideRequest = false;
+  bool rideRequestAlreadyMade = false;
+
   Map ride = {};
 
   void getRide() async {
@@ -30,7 +40,27 @@ class _RideScreenState extends State<RideScreen> {
     if(result != null && result['success']) {
       setState(() {
         ride = result['data'];
-        loadingRideData = false;
+      });
+      getRideRequest();
+    }
+  }
+
+  void getRideRequest() async {
+    User user = box.get('user');
+
+    var response = await RidesRequestsService().list(
+      query: {
+        'ride': ride['_id'],
+        'passenger': user.id
+      },
+      context: context
+    );
+    setState(() {
+      loadingRideData = false;
+    });
+    if(response != null && response['success']) {
+      setState(() {
+        rideRequestAlreadyMade = response['data'].length > 0;
       });
     }
   }
@@ -44,6 +74,41 @@ class _RideScreenState extends State<RideScreen> {
 
   int getAvailableVacancies() {
     return ride['passengersAmount'] - ride['passengers'].length;
+  }
+
+  void createRideRequest() async {
+    User user = box.get('user');
+    
+    setState(() {
+      creatingRideRequest = true;
+    });
+
+    var response = await RidesRequestsService().create(
+      data: {
+        'ride': ride['_id'],
+        'passenger': user.id
+      },
+      context: context
+    );
+
+    setState(() {
+      creatingRideRequest = false;
+    });
+
+    if (response != null && response['success']) {
+      toast(
+        message: 'Solicitação criada com sucesso.',
+        context: context,
+        type: 'success'
+      );
+      Navigator.of(context).pop();
+    }
+  }
+
+  bool verifyDriverEqualsToUser() {
+    User user = box.get('user');
+
+    return ride['driver']['_id'] == user.id;
   }
 
   @override
@@ -99,19 +164,36 @@ class _RideScreenState extends State<RideScreen> {
                     else
                       ...[
                         DriverRideCard(
+                          rideID: ride['_id'],
                           startLocation: ride['startLocation']['name'],
                           endLocation: ride['endLocation']['name'],
                           date: ride['date'],
                           numberOfPassengers: ride['passengers'].length,
-                          totalVacancies: ride['passengersAmount']
+                          totalVacancies: ride['passengersAmount'],
+                          numOfRequests: 0
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 10.0),
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('Solicitar carona')
+
+                        if(!verifyDriverEqualsToUser())
+                          Container(
+                            margin: const EdgeInsets.only(top: 10.0),
+                            child: ElevatedButton(
+                              onPressed: creatingRideRequest || rideRequestAlreadyMade ? null : () {
+                                createRideRequest();
+                              },
+                              child: creatingRideRequest
+                                ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3),
+                                )
+                                : Text(
+                                  rideRequestAlreadyMade
+                                    ? 'Você já soliticou uma vaga nessa carona.'
+                                    : 'Solicitar carona',
+                                  textAlign: TextAlign.center
+                                )
+                            ),
                           ),
-                        ),
                         Container(
                           width: appComponentsWidth,
                           margin: const EdgeInsets.only(top: 15.0),
@@ -151,7 +233,7 @@ class _RideScreenState extends State<RideScreen> {
                             ],
                           )
                         ),
-                        Container(
+                        SizedBox(
                           width: appComponentsWidth,
                           child: Text(
                             'Pessoas confirmadas na carona',

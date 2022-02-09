@@ -77,147 +77,147 @@ class _DriverHomeState extends State<DriverHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const LevaEuDrawer(),
-        appBar: const LevaEuAppBar(title: 'Motorista'),
-        body: SafeArea(
-            child: RefreshIndicator(
-                onRefresh: reloadScreen,
-                color: appPrimaryColor,
-                child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    child: Center(
-                        child: Container(
-                            margin: const EdgeInsets.only(top: 20.0),
-                            width: appComponentsWidth,
-                            child: Column(children: [
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    top: 20.0, bottom: 10),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFC4C4C4),
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Flexible(
-                                      flex: 1,
-                                      fit: FlexFit.tight,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            activeRidesSelected = true;
-                                          });
-                                        },
-                                        child: Container(
-                                          height: 50,
-                                          alignment: Alignment.center,
-                                          margin: const EdgeInsets.all(5.0),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 10),
-                                          decoration: activeRidesSelected
-                                              ? BoxDecoration(
-                                                  color: appSecondaryColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(25),
-                                                )
-                                              : null,
-                                          child: Text(
-                                            'Caronas ativas',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: 12.0.sp,
-                                                color: activeRidesSelected
-                                                    ? Colors.white
-                                                    : appTextColor),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Flexible(
-                                      flex: 1,
-                                      fit: FlexFit.tight,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            activeRidesSelected = false;
-                                          });
-                                        },
-                                        child: Container(
-                                          height: 50,
-                                          alignment: Alignment.center,
-                                          margin: const EdgeInsets.all(5.0),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 10),
-                                          decoration: !activeRidesSelected
-                                              ? BoxDecoration(
-                                                  color: appSecondaryColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(25),
-                                                )
-                                              : null,
-                                          child: Text(
-                                            'Caronas finalizadas',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: 12.0.sp,
-                                                color: activeRidesSelected
-                                                    ? appTextColor
-                                                    : Colors.white),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
+      drawer: const LevaEuDrawer(),
+      appBar: const LevaEuAppBar(title: 'Motorista'),
+      body: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: reloadScreen,
+          color: appPrimaryColor,
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            child: Center(
+                child: Container(
+                    margin: const EdgeInsets.only(top: 20.0),
+                    width: appComponentsWidth,
+                    child: Column(children: [
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: 20.0, bottom: 10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFC4C4C4),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Row(
+                          children: [
+                            Flexible(
+                              flex: 1,
+                              fit: FlexFit.tight,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    activeRidesSelected = true;
+                                  });
+                                },
+                                child: Container(
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                  margin: const EdgeInsets.all(5.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  decoration: activeRidesSelected
+                                      ? BoxDecoration(
+                                          color: appSecondaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(25),
+                                        )
+                                      : null,
+                                  child: Text(
+                                    'Caronas ativas',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 12.0.sp,
+                                        color: activeRidesSelected
+                                            ? Colors.white
+                                            : appTextColor),
+                                  ),
                                 ),
                               ),
-                              if (activeRidesSelected)
-                                if (loadingActiveRides)
-                                  LoadingList(
-                                      width: appComponentsWidth,
-                                      height: 50,
-                                      addPadding: false)
-                                else ...[
-                                  if (activeRides.isEmpty) const NoRidesCard(),
-                                  for (var ridesIndex = 0;
-                                      ridesIndex < activeRides.length;
-                                      ridesIndex++)
-                                    DriverRideCard(
-                                      startLocation: activeRides[ridesIndex]
-                                          ['startLocation']['name'],
-                                      endLocation: activeRides[ridesIndex]
-                                          ['endLocation']['name'],
-                                      date: activeRides[ridesIndex]['date'],
-                                      numberOfPassengers:
-                                          activeRides[ridesIndex]['passengers']
-                                              .length,
-                                      totalVacancies: activeRides[ridesIndex]
-                                          ['passengersAmount'],
-                                    )
-                                ]
-                              else if (loadingFinishedRides)
-                                LoadingList(
-                                    width: appComponentsWidth,
-                                    height: 50,
-                                    addPadding: false)
-                              else ...[
-                                if (finishedRides.isEmpty) const NoRidesCard(),
-                                for (var ridesIndex = 0;
-                                    ridesIndex < finishedRides.length;
-                                    ridesIndex++)
-                                  DriverRideCard(
-                                    startLocation: finishedRides[ridesIndex]
-                                        ['startLocation']['name'],
-                                    endLocation: finishedRides[ridesIndex]
-                                        ['endLocation']['name'],
-                                    date: finishedRides[ridesIndex]['date'],
-                                    numberOfPassengers:
-                                        finishedRides[ridesIndex]['passengers']
-                                            .length,
-                                    totalVacancies: finishedRides[ridesIndex]
-                                        ['passengersAmount'],
-                                  )
-                              ]
-                            ])))))));
+                            ),
+                            Flexible(
+                              flex: 1,
+                              fit: FlexFit.tight,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    activeRidesSelected = false;
+                                  });
+                                },
+                                child: Container(
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                  margin: const EdgeInsets.all(5.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  decoration: !activeRidesSelected
+                                      ? BoxDecoration(
+                                          color: appSecondaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(25),
+                                        )
+                                      : null,
+                                  child: Text(
+                                    'Caronas finalizadas',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 12.0.sp,
+                                        color: activeRidesSelected
+                                            ? appTextColor
+                                            : Colors.white),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      if (activeRidesSelected)
+                        if (loadingActiveRides)
+                          LoadingList(
+                              width: appComponentsWidth,
+                              height: 50,
+                              addPadding: false)
+                        else ...[
+                          if (activeRides.isEmpty) const NoRidesCard(),
+                          for (var ridesIndex = 0;
+                              ridesIndex < activeRides.length;
+                              ridesIndex++)
+                            DriverRideCard(
+                              rideID: activeRides[ridesIndex]['_id'],
+                              startLocation: activeRides[ridesIndex]['startLocation']['name'],
+                              endLocation: activeRides[ridesIndex]['endLocation']['name'],
+                              date: activeRides[ridesIndex]['date'],
+                              numberOfPassengers: activeRides[ridesIndex]['passengers'].length,
+                              totalVacancies: activeRides[ridesIndex]['passengersAmount'],
+                              numOfRequests: activeRides[ridesIndex]['requests'].length,
+                            )
+                        ]
+                      else if (loadingFinishedRides)
+                        LoadingList(
+                            width: appComponentsWidth,
+                            height: 50,
+                            addPadding: false)
+                      else ...[
+                        if (finishedRides.isEmpty) const NoRidesCard(),
+                        for (var ridesIndex = 0;
+                            ridesIndex < finishedRides.length;
+                            ridesIndex++)
+                          DriverRideCard(
+                            rideID: finishedRides[ridesIndex]['_id'],
+                            startLocation: finishedRides[ridesIndex]['startLocation']['name'],
+                            endLocation: finishedRides[ridesIndex]['endLocation']['name'],
+                            date: finishedRides[ridesIndex]['date'],
+                            numberOfPassengers: finishedRides[ridesIndex]['passengers'].length,
+                            totalVacancies: finishedRides[ridesIndex]['passengersAmount'],
+                            numOfRequests: activeRides[ridesIndex]['requests'].length,
+                          )
+                      ]
+                    ]
+                  )
+                )
+              )
+            )
+        )
+      )
+    );
   }
 }
