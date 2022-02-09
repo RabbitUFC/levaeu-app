@@ -81,20 +81,16 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
             message: 'A sua conta foi confirmada com sucesso.',
             type: 'success',
           );
-          var user = box.get('user');
 
-          if (user == null) {
-            var _user = User(
-              id: response['data']['_id'],
-              jwtToken: response['data']['token'],
-              name: response['data']['name'],
-              photo: response['data']['photo'],
-              selectedType: response['data']['userTypePreference'],
-              isSignedIn: true,
-            );
-            box.put('user', _user);
-            user = box.get('user');
-          }
+          var _user = User(
+            id: response['data']['_id'],
+            jwtToken: response['data']['token'],
+            name: response['data']['name'],
+            photo: response['data']['photo'],
+            selectedType: response['data']['userTypePreference'],
+            isSignedIn: true,
+          );
+          box.put('user', _user);
           Navigator.of(context)
             .pushNamedAndRemoveUntil(Home.routeName, (Route<dynamic> route) => false);
         } else {

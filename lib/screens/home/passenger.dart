@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:levaeu_app/components/appbar.dart';
 
 import 'package:levaeu_app/components/custom_suffix_icon.dart';
+import 'package:levaeu_app/components/drawer.dart';
 import 'package:levaeu_app/components/loading_list.dart';
 import 'package:levaeu_app/screens/home/components/no_rides_card.dart';
 import 'package:levaeu_app/screens/home/components/ride_card.dart';
@@ -74,6 +75,7 @@ class _PassengerHomeState extends State<PassengerHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const LevaEuDrawer(),
       appBar: const LevaEuAppBar(title: 'Passageiro'),
       body: SafeArea(
         child: RefreshIndicator(

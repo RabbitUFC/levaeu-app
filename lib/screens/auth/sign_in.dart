@@ -66,20 +66,17 @@ class _SignInState extends State<SignIn> {
         setState(() {
           loading = false;
         });
-        var user = box.get('user');
 
-        if (user == null) {
-          var _user = User(
-            id: response['data']['_id'],
-            jwtToken: response['data']['token'],
-            name: response['data']['name'],
-            photo: response['data']['photo'],
-            selectedType: response['data']['userTypePreference'],
-            isSignedIn: true,
-          );
-          box.put('user', _user);
-          user = box.get('user');
-        }
+        User _user = User(
+          id: response['data']['_id'],
+          jwtToken: response['data']['token'],
+          name: response['data']['name'],
+          photo: response['data']['photo'],
+          selectedType: response['data']['userTypePreference'],
+          isSignedIn: true,
+        );
+        box.put('user', _user);
+
         Navigator.of(context)
           .pushNamedAndRemoveUntil(HomePageView.routeName, (Route<dynamic> route) => false);
       } else {
@@ -113,8 +110,8 @@ class _SignInState extends State<SignIn> {
   verifyIfIsAuthenticated () async {
     await Future.delayed(const Duration(seconds: 1));
     var user = box.get('user');
-    if(user != null) {
-      Navigator.of(context, rootNavigator: true).pop();
+    Navigator.of(context, rootNavigator: true).pop();
+    if(user != null && user.jwtToken != '' && user.isSignedIn) {
       await Future.delayed(const Duration(milliseconds: 50));
       Navigator.of(context)
         .pushNamedAndRemoveUntil(HomePageView.routeName, (Route<dynamic> route) => false);
