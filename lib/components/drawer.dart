@@ -3,11 +3,32 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:levaeu_app/hive/user.dart';
+import 'package:levaeu_app/screens/initial_screen.dart';
 import 'package:levaeu_app/theme.dart';
 import 'package:levaeu_app/utils/hive.dart';
 
 class LevaEuDrawer extends StatelessWidget {
   const LevaEuDrawer({Key? key}) : super(key: key);
+
+  void logout(context) {
+    var box = Hive.box(userBox);
+    User _user = box.get('user');
+    User user = User(
+      id: '',
+      jwtToken: '',
+      name: '',
+      photo: '',
+      selectedType: _user.selectedType,
+      isSignedIn: false,
+    );
+    box.put('user', user);
+    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const InitialScreen()
+      ),
+      (Route<dynamic> route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +105,11 @@ class LevaEuDrawer extends StatelessWidget {
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
-                          const ListTile(
-                            title: Text(
+                          ListTile(
+                            onTap: () {
+                              logout(context);
+                            },
+                            title: const Text(
                               'Sair',
                               style: TextStyle(color: Colors.white),
                             ),

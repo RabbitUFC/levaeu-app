@@ -56,7 +56,7 @@ class _SignUpState extends State<SignUp> {
   bool loading = false;
   final List<String> errors = [];
   final List<String> userTypePreferences = [
-    'passanger',
+    'passenger',
     'driver'
   ];
 
